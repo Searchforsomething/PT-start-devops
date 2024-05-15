@@ -333,10 +333,21 @@ def getServices(update: Update, context):
 
 
 def getReplLogs(update: Update, context):
-    stdin, stdout, stderr = client.exec_command('docker logs -n 30 db_image')
+  
+    #for docker
+    #stdin, stdout, stderr = client.exec_command('docker logs -n 30 db_image')
+  
+    #for ansible
+    stdin, stdout, stderr = client.exec_command("cat /var/log/postgresql/postgresql-14-main.log")
+  
     chunk_size = 4096
     while True:
-        chunk = stderr.read(chunk_size).decode('utf-8')
+        #for ansible
+        chunk = stdout.read(chunk_size).decode('utf-8')
+      
+        #for docker
+        #chunk = stderr.read(chunk_size).decode('utf-8')
+      
         if not chunk:
             break
         update.message.reply_text(chunk)
